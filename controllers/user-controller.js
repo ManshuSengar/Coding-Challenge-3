@@ -1,5 +1,5 @@
 const userService = require("../services/user-service");
-const User=require('../models/user-model');
+const User = require("../models/user-model");
 
 class UserController {
   async createUser(req, res) {
@@ -8,27 +8,31 @@ class UserController {
       res.status(400).json("Please Enter all the Feilds");
     }
 
-    const userExists = await User.findOne({ email,deleted:false });
+    const userExists = await User.findOne({ email, deleted: false });
     if (userExists) {
       return res.status(400).json("User already exists");
     }
-    const user = await User.create({
-      firstname,
-      lastname,
-      email,
-      password,
-    });
-
-    if (user) {
-      res.status(201).json({
-        _id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        password: user.password,
-        email: user.email,
+    try {
+      const user = await userService.createUser({
+        firstname,
+        lastname,
+        email,
+        password,
       });
-    } else {
-     return res.status(400).json("User not found");
+
+      if (user) {
+        res.status(201).json({
+          _id: user._id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          password: user.password,
+          email: user.email,
+        });
+      } else {
+        return res.status(400).json("User not found");
+      }
+    } catch (err) {
+      return res.status(400).json("Error");
     }
   }
 
@@ -42,22 +46,22 @@ class UserController {
     return res.json(user);
   }
 
-   async update(req, res) {
-    try {   
-      const user = await userService.updateUser(req.params.userId,req.body);
+  async update(req, res) {
+    try {
+      const user = await userService.updateUser(req.params.userId, req.body);
       res.send(user);
     } catch (error) {
       res.status(500).send(error);
     }
-  };
-   async delete(req, res) {
-    try {   
-      const user = await userService.deleteUser(req.params.userId,req.body);
+  }
+  async delete(req, res) {
+    try {
+      const user = await userService.deleteUser(req.params.userId, req.body);
       res.send(user);
     } catch (error) {
       res.status(500).send(error);
     }
-  };
+  }
 }
 
 module.exports = new UserController();

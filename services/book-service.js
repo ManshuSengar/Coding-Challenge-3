@@ -3,6 +3,12 @@ const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 
 class BookService {
+
+  async createBook(data){
+    const book = await Book.create(data);
+    return book;
+  }
+
   async getBook(bookId) {
     const book = await Book.findOne({ _id: bookId });
     return book;

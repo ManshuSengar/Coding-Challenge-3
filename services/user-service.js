@@ -2,6 +2,13 @@ const User=require('../models/user-model');
 const bcrypt = require("bcryptjs");
 
 class UserService{
+ 
+    async createUser(data){
+        const user = await User.create(data);
+        return user;
+      }
+
+
     async getUser(userId) {
         const user = await User.findOne({ _id: userId });
         return user;
@@ -21,6 +28,5 @@ class UserService{
         return user;
     }
 
-
 }
-exports.module=new UserService();
+module.exports=new UserService();
