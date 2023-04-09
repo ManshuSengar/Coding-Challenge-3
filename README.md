@@ -1,2 +1,2 @@
-# Coding -Challege
+# Coding -Challenge
 
